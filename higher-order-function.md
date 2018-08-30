@@ -2,7 +2,7 @@
 
 [JavaScript ( 時々 TypeScript ) で学ぶ関数型プログラミングの基礎の基礎 #1 - 高階関数について](https://tech.recruit-mp.co.jp/front-end/post-15867/)
 
-## 高階関数
+## 高階関数とは
 
 関数を「引数」、もしくは「戻り値」として扱う関数のこと。
 
@@ -55,4 +55,51 @@ repeatedly(3, () => 'bar');
 
 ### 戻り値として他の関数を返す関数
 
-### なぜ関数を返す関数を利用するのか（存在するのか）
+JavaScript のクロージャがそれに当たる。
+
+```ts
+function outer() {
+  const inner = () => {
+    console.log('hello!!');
+  };
+
+  // inner 関数を戻り値として返す
+  return inner;
+}
+
+// outer 関数の戻り値 （inner 関数）が f に代入される
+const f = outer();
+
+f();
+// => 'hello!!'
+
+f() === f();
+//=> true
+
+const a = outer();
+const b = outer();
+
+a === b;
+// => false
+```
+
+### 関数を返す高階関数の例
+
+```ts
+/**
+ * 「引数の値を加えた文字列を返す関数」を返す
+ */
+function makeGreet(timeZone) {
+  const greet = name => console.log(`Good ${timeZone}, ${name} !!`);
+
+  return greet;
+}
+
+const f = makeGreet('morning');
+f('naoki');
+//=> "Good morning, naoki !!"
+
+const g = makeGreet('afternoon');
+g('wakamsha');
+//=> "Good afternoon, wakamsha !!"
+```
